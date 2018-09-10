@@ -17,18 +17,16 @@ import envvars as e
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-e.load(os.path.join(BASE_DIR, 'conf/env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = e.get('DJANGO_SECRET')
-TELEGRAM_TOKEN = e.get('TELEGRAM_TOKEN')
-WEBHOOK_HOST_NAME = e.get('TELEGRAM_WEBHOOK_HOST_NAME')
-
+SECRET_KEY = os.getenv("SECRET_KEY", "xut%w+twdx$98o7a_#^ix&au1ywfjb8pj-wwn5i+-d=30yb26=")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+WEBHOOK_HOST_NAME = os.getenv("TELEGRAM_WEBHOOK_HOST_NAME", "https://509fb453.ngrok.io")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv("DEBUG", True))
 
 ALLOWED_HOSTS = ['*', ]
 
@@ -78,7 +76,7 @@ WSGI_APPLICATION = 'telegrambot.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(e.get('DJANGO_DB')),
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL')),
 }
 
 # Password validation
@@ -124,6 +122,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-REDIS_URL = e.get('REDIS_URL')
+REDIS_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
 
 django_heroku.settings(locals())
