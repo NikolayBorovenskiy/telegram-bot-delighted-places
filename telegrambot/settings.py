@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-import dj_database_url
 import os
 
+import dj_database_url
+import django_heroku
 import envvars as e
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -124,3 +125,5 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 REDIS_URL = e.get('REDIS_URL')
+
+django_heroku.settings(locals())
