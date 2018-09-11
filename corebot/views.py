@@ -52,6 +52,35 @@ def choose_place_to_show_callback_handler(callback_query):
     )
 
 
+@bot.message_handler(commands=["help"])
+def handle_app_place(message):
+    help_message = '''
+    Привет! Я могу помогать тебе помнить и всегда вернуться в места, которые тебе понравились. 
+    Просто лови момент и дай знать, что запоминать.
+
+    Ты можешь контролировать меня этими командами:
+    
+    <b>/start</b> - Скажу тебе, что я умею
+    <b>/add</b>- Добавлю новое место, которое ты хочешь не забыть
+    <b>/list</b> - Покажу тебе 10 последних мест, которые ты мне прислал
+    <b>/reset</b> - Удалю все твои данные и забуду о тебе навсегда
+    <b>/help</b> - Напомню о себе немного
+    '''
+    bot.send_message(message.chat.id, help_message)
+
+
+@bot.message_handler(commands=["start"])
+def handle_app_place(message):
+    start_message = '''
+    Ты можешь для начала использовть комманду <b>/start</b> чтобы начать.
+
+    Если хочешь узнать больше обо мне, то используй команду <b>/help</b> 
+    и я напомню о себе.
+    Удачи!
+    '''
+    bot.send_message(message.chat.id, start_message)
+
+
 @bot.message_handler(commands=["reset"])
 def handle_app_place(message):
     try:
@@ -144,7 +173,7 @@ def handler_photo(message):
     func=lambda message: user_place.get_user_state(
         message.chat.id) == CONFIRMATION)
 def handler_confirmation(message):
-    if 'да' in message.text.lower():
+    if ('да' or 'сохранить') in message.text.lower():
         user, created = User.objects.get_or_create(
             first_name=message.from_user.first_name,
             last_name=message.from_user.first_name,
@@ -186,6 +215,15 @@ def handle_plain_location(message):
         )
     else:
         bot.send_message(message.chat.id, text="Нет ничего подходящего рядом.")
+
+
+@bot.message_handler()
+def handle_message(message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="Похоже, что мне непонятно твое желение. "
+             "Используй <b>/help</b> и я расскажу о себе."
+    )
 
 
 @csrf_exempt
