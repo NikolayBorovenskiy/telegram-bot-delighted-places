@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from corebot.utils import upload_location
@@ -12,10 +14,6 @@ class User(models.Model):
 class Place(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(null=True, blank=True, max_length=150)
-    image = models.ImageField(
-        upload_to=upload_location,
-        null=True,
-        blank=True
-    )
+    image_ref = models.CharField(max_length=32)
     latitude = models.FloatField(default=None)
     longitude = models.FloatField(default=None)

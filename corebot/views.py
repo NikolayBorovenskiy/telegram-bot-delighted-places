@@ -1,4 +1,5 @@
 import json
+import uuid
 
 import telebot
 from django.core.files.base import ContentFile
@@ -40,9 +41,10 @@ def choose_place_to_show_callback_handler(callback_query):
     message = callback_query.message
     data = callback_query.data
     place = Place.objects.get(id=data)
+    image = user_place.get_user_image(place.image_ref)
     bot.send_photo(
         chat_id=message.chat.id,
-        photo=place.image.read(),
+        photo=image,
         caption=place.title
     )
     bot.send_location(
@@ -171,14 +173,16 @@ def handler_confirmation(message):
         )
         title, location, photo_name, photo = user_place.get_user_data(
             message.chat.id)
+        image_ref=uuid.uuid4().hex
         place = Place.objects.create(
             user=user,
             title=title,
             latitude=location.get("latitude"),
-            longitude=location.get("longitude")
+            longitude=location.get("longitude"),
+            image_ref=image_ref
         )
-        place.image.save(photo_name, ContentFile(photo), save=False)
         place.save()
+        user_place.set_user_image(image_ref, photo)
         bot.send_message(message.chat.id, text="Я сохранил это место.")
         user_place.reset_user(message.chat.id)
     elif 'нет' in message.text.lower():

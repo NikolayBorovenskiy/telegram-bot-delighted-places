@@ -43,5 +43,14 @@ class UserPlace:
         data_key = self.user_data_key.format(user_id=user_id)
         self.redis.delete(state_key, data_key)
 
+    def get_user_image(self, image_ref):
+        return self.redis.get(image_ref)
+
+    def set_user_image(self, image_ref, data):
+        return self.redis.set(image_ref, data)
+
+    def delete_user_image(self, image_ref):
+        return self.redis.delete(image_ref)
+
 
 user_place = UserPlace()
