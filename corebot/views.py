@@ -66,7 +66,7 @@ def handle_app_place(message):
     <b>/reset</b> - Удалю все твои данные и забуду о тебе навсегда
     <b>/help</b> - Напомню о себе немного
     '''
-    bot.send_message(message.chat.id, help_message)
+    bot.send_message(message.chat.id, help_message, parse_mode="HTML")
 
 
 @bot.message_handler(commands=["start"])
@@ -78,7 +78,7 @@ def handle_app_place(message):
     и я напомню о себе.
     Удачи!
     '''
-    bot.send_message(message.chat.id, start_message)
+    bot.send_message(message.chat.id, start_message, parse_mode="HTML")
 
 
 @bot.message_handler(commands=["reset"])
@@ -221,6 +221,7 @@ def handle_plain_location(message):
 def handle_message(message):
     bot.send_message(
         chat_id=message.chat.id,
+        parse_mode="HTML",
         text="Похоже, что мне непонятно твое желение. "
              "Используй <b>/help</b> и я расскажу о себе."
     )
