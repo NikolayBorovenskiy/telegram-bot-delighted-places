@@ -76,7 +76,10 @@ def handle_app_place(message):
 @bot.message_handler(commands=["reset"])
 def handle_app_place(message):
     try:
-        User.objects.get(chat_id=message.chat.id).delete()
+        user = User.objects.get(chat_id=message.chat.id)
+        user_images = [place.image_ref for place in user.place_set.all()]
+        user_place.delete_user_images(user_images)
+        user.delete()
         bot.send_message(
             message.chat.id, text="Все, что я знал о тебе, я удалил. Пока!")
     except User.DoesNotExist:
@@ -100,6 +103,7 @@ def handle_list_preview(message):
         user = User.objects.get(chat_id=message.chat.id)
     except User.DoesNotExist:
         bot.send_message(message.chat.id, text="Список мест пуст.")
+        return
     places = user.place_set.all()[:10]
     if places.count():
         card = create_place_list_card(places)

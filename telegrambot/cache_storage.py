@@ -49,8 +49,8 @@ class UserPlace:
     def set_user_image(self, image_ref, data):
         return self.redis.set(image_ref, data)
 
-    def delete_user_image(self, image_ref):
-        return self.redis.delete(image_ref)
+    def delete_user_images(self, image_list):
+        return self.redis.delete(*image_list)
 
 
 user_place = UserPlace()
